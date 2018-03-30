@@ -4,6 +4,9 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+
 // TO RENAME PROJECT:
 // https://stackoverflow.com/questions/16804093/android-studio-rename-package
 // https://stackoverflow.com/questions/18276872/change-project-name-on-android-studio

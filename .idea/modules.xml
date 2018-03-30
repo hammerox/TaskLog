@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\mcustodio\Projects\beat-the-resistance\BeatTheResistance.iml" filepath="C:\Users\mcustodio\Projects\beat-the-resistance\BeatTheResistance.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Task Log.iml" filepath="$PROJECT_DIR$/Task Log.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TaskLog.iml" filepath="$PROJECT_DIR$/TaskLog.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\logonrm\beat-the-resistance\app\app.iml" filepath="C:\Users\logonrm\beat-the-resistance\app\app.iml" />
-      <module fileurl="file://C:\Users\mcustodio\Projects\beat-the-resistance\app\app.iml" filepath="C:\Users\mcustodio\Projects\beat-the-resistance\app\app.iml" />
-      <module fileurl="file://C:\Users\logonrm\Desktop\beat-the-resistance\app\app.iml" filepath="C:\Users\logonrm\Desktop\beat-the-resistance\app\app.iml" />
-      <module fileurl="file://C:\Users\logonrm\Desktop\beat-the-resistance\beat-the-resistance.iml" filepath="C:\Users\logonrm\Desktop\beat-the-resistance\beat-the-resistance.iml" />
-      <module fileurl="file://C:\Users\logonrm\beat-the-resistance\beat-the-resistance.iml" filepath="C:\Users\logonrm\beat-the-resistance\beat-the-resistance.iml" />
     </modules>
   </component>
 </project>
