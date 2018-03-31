@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.item_counter.view.*
 
 
 
-class MainAdapter : RecyclerView.Adapter<MainAdapter.CounterViewHolder>() {
+class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     var onItemClick: ((Task) -> Unit)? = null
     var onItemLongClick: ((Task) -> Unit)? = null
@@ -28,12 +28,12 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.CounterViewHolder>() {
         return data.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_counter, parent, false)
-        return CounterViewHolder(view)
+        return TaskViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CounterViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val task = data[position]
         val next = if (position - 1 >= 0) data[position - 1] else null
         holder.setView(task, next)
@@ -43,12 +43,13 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.CounterViewHolder>() {
 
 
 
-    class CounterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val card = view.card_counteritem
         private val date = view.text_counteritem_date
         private val description = view.text_counteritem_description
         private val diff = view.text_counteritem_diff
+
 
         fun setView(task: Task, nextTask: Task?) {
             date.text = task.startDate?.toString("HH'h'mm") ?: ""
@@ -56,23 +57,34 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.CounterViewHolder>() {
             description.switchVisibility(!task.description.isNullOrBlank())
 
             diff.switchVisibility(nextTask != null)
-            diff.text = nextTask?.let {
-                val first = nextTask.startDate?.time ?: 0
-                val last = task.startDate?.time ?: 0
-                val timeDifference = first - last
-                (timeDifference / 60000).toString() + "m"
-            } ?: ""
+            diff.text = timeDifference(task, nextTask)
         }
+
 
         fun setClickListener(onItemClick: ((Task) -> Unit)?, example: Task) {
             card.setOnClickListener { onItemClick?.invoke(example) }
         }
+
 
         fun setLongClickListener(onItemLongClick: ((Task) -> Unit)?, example: Task) {
             card.setOnLongClickListener {
                 onItemLongClick?.invoke(example)
                 true
             }
+        }
+
+
+        private fun timeDifference(task: Task, nextTask: Task?) : String {
+            return nextTask?.let {
+                val first = nextTask.startDate?.time ?: 0
+                val last = task.startDate?.time ?: 0
+                val timeDifference = first - last
+                val minutesDiff = (timeDifference / 60000)
+                val hoursCount = (minutesDiff / 60)
+                val minuteCount = (minutesDiff % 60)
+                return if (hoursCount >= 1) "${hoursCount}h ${minuteCount}m"
+                else "${minuteCount}m"
+            } ?: ""
         }
     }
 }

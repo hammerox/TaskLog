@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
-    private val counterAdapter = MainAdapter()
+    private val counterAdapter = TaskAdapter()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
