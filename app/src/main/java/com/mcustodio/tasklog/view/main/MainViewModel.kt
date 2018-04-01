@@ -24,12 +24,25 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
 
-    fun insert(example: Task) = repository.insert(example)
+    fun insert(task: Task) = repository.insert(task)
 
-    fun update(example: Task) = repository.update(example)
+    fun update(task: Task) = repository.update(task)
 
-    fun delete(example: Task) = repository.delete(example)
+    fun delete(task: Task) = repository.delete(task)
 
     fun clearAll() = repository.clearAll()
+
+
+    fun shiftTime(task: Task, minutesToShift: Int) {
+        val shiftedTasks = shiftInto(task, minutesToShift)
+        shiftedTasks?.let { repository.updateAll(it) }
+    }
+
+
+    private fun shiftInto(task: Task, minutesToShift: Int) : List<Task>? {
+        return tasks.value
+                ?.filter { t -> t.startDate?.time ?: 0 >= task.startDate?.time ?: 0 }
+                ?.onEach { t -> t.startDate?.time = t.startDate!!.time - minutesToShift * 60000 }
+    }
 
 }

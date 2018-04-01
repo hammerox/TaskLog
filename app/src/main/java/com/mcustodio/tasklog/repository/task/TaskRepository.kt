@@ -19,25 +19,33 @@ class TaskRepository(context: Context) : BaseRepository(context) {
     }
 
 
-    fun insert(example: Task) {
+    fun insert(task: Task) {
         Observable.just(database.resistanceDao())
-                .doOnNext { it.insert(example) }
+                .doOnNext { it.insert(task) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
     }
 
 
-    fun update(example: Task) {
+    fun update(task: Task) {
         Observable.just(database.resistanceDao())
-                .doOnNext { it.update(example) }
+                .doOnNext { it.update(task) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
     }
 
 
-    fun delete(example: Task) {
+    fun updateAll(tasks: List<Task>) {
         Observable.just(database.resistanceDao())
-                .doOnNext { it.delete(example) }
+                .doOnNext { it.update(tasks) }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+    }
+
+
+    fun delete(task: Task) {
+        Observable.just(database.resistanceDao())
+                .doOnNext { it.delete(task) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
     }

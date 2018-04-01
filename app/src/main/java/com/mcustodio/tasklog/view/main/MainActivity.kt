@@ -110,7 +110,9 @@ class MainActivity : AppCompatActivity() {
                 .title("Duração em minutos")
                 .inputType(InputType.TYPE_CLASS_NUMBER)
                 .input("", minuteDiff.toString(), { dialog, input ->
-                    Toast.makeText(this, input, Toast.LENGTH_LONG).show()
+                    val inputInt = input.toString().toInt()
+                    val minutesToShift = minuteDiff.toInt() - inputInt
+                    viewModel.shiftTime(tasks.second, minutesToShift)
                 }).show()
     }
 
