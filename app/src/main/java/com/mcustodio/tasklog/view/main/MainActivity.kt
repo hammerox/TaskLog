@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.mcustodio.tasklog.utils.toast
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.dialog_counter.view.*
 
 
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setButtonClickListener()
         setRecyclerView()
-        observeCounter()
+//        observeCounter()
         observeResistanceList()
     }
 
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         ViewCompat.setNestedScrollingEnabled(list_counter, false)
         counterAdapter.onItemClick = onCardItemClick
         counterAdapter.onItemLongClick = onCardItemLongClick
+        counterAdapter.onTimeClick = onTimeItemClick
     }
 
 
@@ -72,14 +74,28 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun observeResistanceList() {
-        viewModel.examples.observe(this, Observer {
+        viewModel.tasks.observe(this, Observer {
             it?.let { counterAdapter.data = it }
         })
     }
 
 
-    private val onCardItemClick : ((Task) -> Unit) = { example ->
-        askForDescription(example)
+    private val onCardItemClick : ((Task) -> Unit) = { task ->
+        askForDescription(task)
+
+    }
+
+
+    private val onTimeItemClick : ((Task) -> Unit) = { task ->
+        val now = Calendar.getInstance()
+        now.time = task.startDate
+        val tdp = TimePickerDialog.newInstance(
+                onTimeSet(task),
+                now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE),
+                true
+        )
+        tdp.show(fragmentManager, "TimePickerDialog")
     }
 
 
@@ -124,4 +140,18 @@ class MainActivity : AppCompatActivity() {
             viewModel.insert(newResistance)
         }
     }
+
+
+    private fun onTimeSet(task: Task) : TimePickerDialog.OnTimeSetListener {
+        return TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute, second ->
+            val now = Calendar.getInstance()
+            now.time = task.startDate
+            now.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            now.set(Calendar.MINUTE, minute)
+            now.set(Calendar.SECOND, second)
+            task.startDate = now.time
+            viewModel.update(task)
+        }
+    }
+
 }

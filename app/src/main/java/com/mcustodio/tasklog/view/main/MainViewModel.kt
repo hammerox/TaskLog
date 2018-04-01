@@ -11,7 +11,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
 
     var counter : LiveData<Int>
-    var examples: LiveData<List<Task>>
+    var tasks: LiveData<List<Task>>
 
     private val repository by lazy { TaskRepository(app) }
 
@@ -20,7 +20,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     init {
         val resistanceFlow = repository.getDatabase()
         counter = LiveDataReactiveStreams.fromPublisher(resistanceFlow.map { it.size })
-        examples = LiveDataReactiveStreams.fromPublisher(resistanceFlow)
+        tasks = LiveDataReactiveStreams.fromPublisher(resistanceFlow)
     }
 
 

@@ -16,6 +16,7 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     var onItemClick: ((Task) -> Unit)? = null
     var onItemLongClick: ((Task) -> Unit)? = null
+    var onTimeClick: ((Task) -> Unit)? = null
 
     var data : List<Task> = listOf()
         set(value) {
@@ -39,6 +40,7 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
         holder.setView(task, next)
         holder.setClickListener(onItemClick, task)
         holder.setLongClickListener(onItemLongClick, task)
+        holder.setTimeClickListener(onTimeClick, task)
     }
 
 
@@ -61,16 +63,21 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
         }
 
 
-        fun setClickListener(onItemClick: ((Task) -> Unit)?, example: Task) {
-            card.setOnClickListener { onItemClick?.invoke(example) }
+        fun setClickListener(onItemClick: ((Task) -> Unit)?, task: Task) {
+            card.setOnClickListener { onItemClick?.invoke(task) }
         }
 
 
-        fun setLongClickListener(onItemLongClick: ((Task) -> Unit)?, example: Task) {
+        fun setLongClickListener(onItemLongClick: ((Task) -> Unit)?, task: Task) {
             card.setOnLongClickListener {
-                onItemLongClick?.invoke(example)
+                onItemLongClick?.invoke(task)
                 true
             }
+        }
+
+
+        fun setTimeClickListener(onTimeClick: ((Task) -> Unit)?, task: Task) {
+            date.setOnClickListener { onTimeClick?.invoke(task) }
         }
 
 
