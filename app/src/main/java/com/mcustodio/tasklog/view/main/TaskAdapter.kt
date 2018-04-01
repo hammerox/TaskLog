@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.mcustodio.tasklog.R
 import com.mcustodio.tasklog.model.task.Task
+import com.mcustodio.tasklog.utils.TimeDiff
 import com.mcustodio.tasklog.utils.switchVisibility
 import com.mcustodio.tasklog.utils.toString
 import kotlinx.android.synthetic.main.item_counter.view.*
@@ -17,6 +18,7 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
     var onItemClick: ((Task) -> Unit)? = null
     var onItemLongClick: ((Task) -> Unit)? = null
     var onTimeClick: ((Task) -> Unit)? = null
+    var onDiffTimeClick: ((Pair<Task, Task>) -> Unit)? = null
 
     var data : List<Task> = listOf()
         set(value) {
@@ -41,6 +43,7 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
         holder.setClickListener(onItemClick, task)
         holder.setLongClickListener(onItemLongClick, task)
         holder.setTimeClickListener(onTimeClick, task)
+        holder.setDiffTimeClickListener(onDiffTimeClick, task, next)
     }
 
 
@@ -81,12 +84,14 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
         }
 
 
+        fun setDiffTimeClickListener(onDiffTimeClick: ((Pair<Task,Task>) -> Unit)?, task: Task, next: Task?) {
+            if (next != null) diff.setOnClickListener { onDiffTimeClick?.invoke(task to next) }
+        }
+
+
         private fun timeDifference(task: Task, nextTask: Task?) : String {
             return nextTask?.let {
-                val first = nextTask.startDate?.time ?: 0
-                val last = task.startDate?.time ?: 0
-                val timeDifference = first - last
-                val minutesDiff = (timeDifference / 60000)
+                val minutesDiff = TimeDiff.minuteDiff(task, nextTask)
                 val hoursCount = (minutesDiff / 60)
                 val minuteCount = (minutesDiff % 60)
                 return if (hoursCount >= 1) "${hoursCount}h ${minuteCount}m"

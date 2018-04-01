@@ -8,6 +8,7 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.mcustodio.tasklog.R
 import com.mcustodio.tasklog.model.task.Task
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,6 +17,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.mcustodio.tasklog.utils.toast
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.dialog_counter.view.*
+import android.text.InputType
+import com.mcustodio.tasklog.utils.TimeDiff
 
 
 class MainActivity : AppCompatActivity() {
@@ -63,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         counterAdapter.onItemClick = onCardItemClick
         counterAdapter.onItemLongClick = onCardItemLongClick
         counterAdapter.onTimeClick = onTimeItemClick
+        counterAdapter.onDiffTimeClick = onDiffTimeItemClick
     }
 
 
@@ -96,6 +100,18 @@ class MainActivity : AppCompatActivity() {
                 true
         )
         tdp.show(fragmentManager, "TimePickerDialog")
+    }
+
+
+    private val onDiffTimeItemClick: ((Pair<Task, Task>) -> Unit) = { tasks ->
+        val minuteDiff = TimeDiff.minuteDiff(tasks.first, tasks.second)
+
+        MaterialDialog.Builder(this)
+                .title("Duração em minutos")
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .input("", minuteDiff.toString(), { dialog, input ->
+                    Toast.makeText(this, input, Toast.LENGTH_LONG).show()
+                }).show()
     }
 
 
