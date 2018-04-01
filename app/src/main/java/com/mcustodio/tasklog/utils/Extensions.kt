@@ -216,6 +216,15 @@ fun Date.toString(sdf: SimpleDateFormat): String {
 }
 
 
+fun Date.ignoreSeconds() : Date {
+    val seconds = this.time % 60000
+    val newTime = this.time - seconds
+    val date = Calendar.getInstance()
+    date.time.time = newTime
+    return date.time
+}
+
+
 
 // View extensions
 

@@ -8,7 +8,6 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.mcustodio.tasklog.R
 import com.mcustodio.tasklog.model.task.Task
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,6 +18,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.dialog_counter.view.*
 import android.text.InputType
 import com.mcustodio.tasklog.utils.TimeDiff
+import com.mcustodio.tasklog.utils.ignoreSeconds
 
 
 class MainActivity : AppCompatActivity() {
@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
                 .positiveText("OK")
                 .onPositive { dialog, _ ->
                     val description = dialog.view.edit_counterdialog_description.text.toString()
-                    createOrUpdateResistance(example, description)
+                    createOrUpdateTask(example, description)
                 }
                 .build()
         dialog.customView?.edit_counterdialog_description?.setText(example?.description)
@@ -147,15 +147,15 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun createOrUpdateResistance(example: Task?, description: String?) {
-        if (example != null) {
-            example.description = description
-            viewModel.update(example)
+    private fun createOrUpdateTask(task: Task?, description: String?) {
+        if (task != null) {
+            task.description = description
+            viewModel.update(task)
         } else {
-            val newResistance = Task()
-            newResistance.startDate = Calendar.getInstance().time
-            newResistance.description = description
-            viewModel.insert(newResistance)
+            val newTask = Task()
+            newTask.startDate = Calendar.getInstance().time.ignoreSeconds()
+            newTask.description = description?.trim()
+            viewModel.insert(newTask)
         }
     }
 
