@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity() {
 
     private val onCardItemClick : ((Task) -> Unit) = { task ->
         askForDescription(task)
-
     }
 
 
@@ -132,18 +131,11 @@ class MainActivity : AppCompatActivity() {
 
     // If example == null -> insert
     // If example != null -> update
-    private fun askForDescription(example: Task? = null) {
-        val dialog = MaterialDialog.Builder(this)
-                .title("Descreva")
-                .customView(R.layout.dialog_counter, false)
-                .positiveText("OK")
-                .onPositive { dialog, _ ->
-                    val description = dialog.view.edit_counterdialog_description.text.toString()
-                    createOrUpdateTask(example, description)
-                }
-                .build()
-        dialog.customView?.edit_counterdialog_description?.setText(example?.description)
-        dialog.show()
+    private fun askForDescription(task: Task? = null) {
+        val onSelect: ((String) -> Unit) = { description ->
+            createOrUpdateTask(task, description)
+        }
+        DescriptionDialog(this, onSelect).show(task)
     }
 
 
