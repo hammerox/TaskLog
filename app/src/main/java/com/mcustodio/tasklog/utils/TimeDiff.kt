@@ -10,7 +10,7 @@ class TimeDiff {
             val first = nextTask.startDate?.time ?: 0
             val last = task.startDate?.time ?: 0
             val timeDifference = first - last
-            return (timeDifference / 60000)
+            return Math.round(timeDifference / 60000.0)
         }
 
     }
