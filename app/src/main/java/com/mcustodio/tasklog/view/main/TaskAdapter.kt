@@ -9,7 +9,7 @@ import com.mcustodio.tasklog.model.task.Task
 import com.mcustodio.tasklog.utils.TimeDiff
 import com.mcustodio.tasklog.utils.switchVisibility
 import com.mcustodio.tasklog.utils.toString
-import kotlinx.android.synthetic.main.item_counter.view.*
+import kotlinx.android.synthetic.main.item_task.view.*
 
 
 
@@ -32,7 +32,7 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_counter, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
         return TaskViewHolder(view)
     }
 
