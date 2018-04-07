@@ -22,7 +22,7 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     var data : List<Task> = listOf()
         set(value) {
-            field = value.sortedByDescending { it.startDate }
+            field = value.sortedBy { it.startDate }
             notifyDataSetChanged()
         }
 
@@ -38,12 +38,13 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val task = data[position]
-        val next = if (position - 1 >= 0) data[position - 1] else null
-        holder.setView(task, next)
+        val next = position + 1
+        val nextTask = if (next < data.size) data[next] else null
+        holder.setView(task, nextTask)
         holder.setClickListener(onItemClick, task)
         holder.setLongClickListener(onItemLongClick, task)
         holder.setTimeClickListener(onTimeClick, task)
-        holder.setDiffTimeClickListener(onDiffTimeClick, task, next)
+        holder.setDiffTimeClickListener(onDiffTimeClick, task, nextTask)
     }
 
 
