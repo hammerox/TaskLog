@@ -12,7 +12,7 @@ import com.mcustodio.tasklog.model.task.TaskDao
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun resistanceDao(): TaskDao
+    abstract fun taskDao(): TaskDao
 
     companion object {
         const val VERSION = 1

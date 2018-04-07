@@ -1,14 +1,9 @@
 package com.mcustodio.tasklog.view.main
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.LiveDataReactiveStreams
-import android.arch.lifecycle.Observer
-import android.util.Log
+import android.arch.lifecycle.*
 import com.mcustodio.tasklog.model.task.Task
 import com.mcustodio.tasklog.repository.task.TaskRepository
-import io.reactivex.Flowable
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -22,10 +17,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
 
     init {
-        val taskFlow = repository.getDatabase()
-        counter = LiveDataReactiveStreams.fromPublisher(taskFlow.map { it.size })
-        tasks = LiveDataReactiveStreams.fromPublisher(taskFlow)
-        descriptionList = LiveDataReactiveStreams.fromPublisher(taskFlow.mapToDescriptionList())
+        tasks = repository.getDatabase()
+        counter = Transformations.map(tasks) { it.size }
+        descriptionList = Transformations.map(tasks) { it.mapToDescriptionList() }
     }
 
 
@@ -51,12 +45,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
 
-    private fun Flowable<List<Task>>.mapToDescriptionList() : Flowable<List<String>> {
-        return this.map { list ->
-            list.sortedByDescending { it.startDate }
+    private fun List<Task>.mapToDescriptionList() : List<String> {
+        return this.sortedByDescending { it.startDate }
                 .mapNotNull { task -> task.description }
                 .distinct()
-        }
     }
 
 }

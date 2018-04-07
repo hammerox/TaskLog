@@ -1,9 +1,9 @@
 package com.mcustodio.tasklog.repository.task
 
+import android.arch.lifecycle.LiveData
 import android.content.Context
 import com.mcustodio.tasklog.model.task.Task
 import com.mcustodio.tasklog.repository.BaseRepository
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
@@ -11,16 +11,13 @@ import io.reactivex.schedulers.Schedulers
 class TaskRepository(context: Context) : BaseRepository(context) {
 
 
-    fun getDatabase() : Flowable<List<Task>> {
-        return Flowable.just(database.resistanceDao())
-                .flatMap { it.getAll() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
+    fun getDatabase() : LiveData<List<Task>> {
+        return database.taskDao().getAll()
     }
 
 
     fun insert(task: Task) {
-        Observable.just(database.resistanceDao())
+        Observable.just(database.taskDao())
                 .doOnNext { it.insert(task) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
@@ -28,7 +25,7 @@ class TaskRepository(context: Context) : BaseRepository(context) {
 
 
     fun update(task: Task) {
-        Observable.just(database.resistanceDao())
+        Observable.just(database.taskDao())
                 .doOnNext { it.update(task) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
@@ -36,7 +33,7 @@ class TaskRepository(context: Context) : BaseRepository(context) {
 
 
     fun updateAll(tasks: List<Task>) {
-        Observable.just(database.resistanceDao())
+        Observable.just(database.taskDao())
                 .doOnNext { it.update(tasks) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
@@ -44,7 +41,7 @@ class TaskRepository(context: Context) : BaseRepository(context) {
 
 
     fun delete(task: Task) {
-        Observable.just(database.resistanceDao())
+        Observable.just(database.taskDao())
                 .doOnNext { it.delete(task) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
@@ -52,7 +49,7 @@ class TaskRepository(context: Context) : BaseRepository(context) {
 
 
     fun clearAll() {
-        Observable.just(database.resistanceDao())
+        Observable.just(database.taskDao())
                 .doOnNext { it.deleteAll() }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
