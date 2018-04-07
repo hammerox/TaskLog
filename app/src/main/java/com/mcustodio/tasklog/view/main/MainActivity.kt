@@ -13,9 +13,7 @@ import com.mcustodio.tasklog.model.task.Task
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import com.afollestad.materialdialogs.MaterialDialog
-import com.mcustodio.tasklog.utils.toast
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
-import kotlinx.android.synthetic.main.dialog_counter.view.*
 import android.text.InputType
 import com.mcustodio.tasklog.utils.TimeDiff
 import com.mcustodio.tasklog.utils.ignoreSeconds
@@ -33,7 +31,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setButtonClickListener()
         setRecyclerView()
-        observeResistanceList()
+        observeTaskList()
+        observeDescriptionList()
     }
 
 
@@ -69,9 +68,16 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun observeResistanceList() {
+    private fun observeTaskList() {
         viewModel.tasks.observe(this, Observer {
             it?.let { counterAdapter.data = it }
+        })
+    }
+
+
+    private fun observeDescriptionList() {
+        viewModel.descriptionList.observe(this, Observer {
+            // Apenas observar para popular o LiveData
         })
     }
 
@@ -124,10 +130,11 @@ class MainActivity : AppCompatActivity() {
     // If example == null -> insert
     // If example != null -> update
     private fun askForDescription(task: Task? = null) {
+        val list = viewModel.descriptionList.value ?: listOf()
         val onSelect: ((String) -> Unit) = { description ->
             createOrUpdateTask(task, description)
         }
-        DescriptionDialog(this, onSelect).show(task)
+        DescriptionDialog(this, list, onSelect).show(task)
     }
 
 

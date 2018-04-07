@@ -10,9 +10,9 @@ import kotlinx.android.synthetic.main.dialog_counter.view.*
 /**
  * Created by logonrm on 07/04/2018.
  */
-class DescriptionDialog(activity: Activity, onSelect: ((String) -> Unit)) {
+class DescriptionDialog(activity: Activity, list: List<String>, onSelect: ((String) -> Unit)) {
 
-    val descriptionList = listOf("Exemplo", "Aula", "Help", "Almoço", "Sprint", "Texto", "Algum", "Mais um", "Outro exemplo")
+    val descriptionList = list
     val dialog = MaterialDialog.Builder(activity)
             .title("Atividade")
             .customView(R.layout.dialog_counter, false)

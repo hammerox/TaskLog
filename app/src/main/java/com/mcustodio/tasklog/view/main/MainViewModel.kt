@@ -4,23 +4,28 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.LiveDataReactiveStreams
+import android.arch.lifecycle.Observer
+import android.util.Log
 import com.mcustodio.tasklog.model.task.Task
 import com.mcustodio.tasklog.repository.task.TaskRepository
+import io.reactivex.Flowable
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
 
     var counter : LiveData<Int>
     var tasks: LiveData<List<Task>>
+    var descriptionList: LiveData<List<String>>
 
     private val repository by lazy { TaskRepository(app) }
 
 
 
     init {
-        val resistanceFlow = repository.getDatabase()
-        counter = LiveDataReactiveStreams.fromPublisher(resistanceFlow.map { it.size })
-        tasks = LiveDataReactiveStreams.fromPublisher(resistanceFlow)
+        val taskFlow = repository.getDatabase()
+        counter = LiveDataReactiveStreams.fromPublisher(taskFlow.map { it.size })
+        tasks = LiveDataReactiveStreams.fromPublisher(taskFlow)
+        descriptionList = LiveDataReactiveStreams.fromPublisher(taskFlow.mapToDescriptionList())
     }
 
 
@@ -34,15 +39,24 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
 
     fun shiftTime(task: Task, minutesToShift: Int) {
-        val shiftedTasks = shiftInto(task, minutesToShift)
+        val shiftedTasks = shiftStartDate(task, minutesToShift)
         shiftedTasks?.let { repository.updateAll(it) }
     }
 
 
-    private fun shiftInto(task: Task, minutesToShift: Int) : List<Task>? {
+    private fun shiftStartDate(task: Task, minutesToShift: Int) : List<Task>? {
         return tasks.value
                 ?.filter { t -> t.startDate?.time ?: 0 >= task.startDate?.time ?: 0 }
                 ?.onEach { t -> t.startDate?.time = t.startDate!!.time - minutesToShift * 60000 }
+    }
+
+
+    private fun Flowable<List<Task>>.mapToDescriptionList() : Flowable<List<String>> {
+        return this.map { list ->
+            list.sortedByDescending { it.startDate }
+                .mapNotNull { task -> task.description }
+                .distinct()
+        }
     }
 
 }
