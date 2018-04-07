@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setButtonClickListener()
         setRecyclerView()
-//        observeCounter()
         observeResistanceList()
     }
 
@@ -67,13 +66,6 @@ class MainActivity : AppCompatActivity() {
         counterAdapter.onItemLongClick = onCardItemLongClick
         counterAdapter.onTimeClick = onTimeItemClick
         counterAdapter.onDiffTimeClick = onDiffTimeItemClick
-    }
-
-
-    private fun observeCounter() {
-        viewModel.counter.observe(this, Observer {
-            toast(it?.toString() ?: "")
-        })
     }
 
 
