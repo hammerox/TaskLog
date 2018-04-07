@@ -15,6 +15,7 @@ import java.util.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import android.text.InputType
+import com.mcustodio.tasklog.model.folder.Folder
 import com.mcustodio.tasklog.utils.TimeDiff
 import com.mcustodio.tasklog.utils.ignoreSeconds
 
@@ -78,6 +79,15 @@ class MainActivity : AppCompatActivity() {
     private fun observeDescriptionList() {
         viewModel.descriptionList.observe(this, Observer {
             // Apenas observar para popular o LiveData
+        })
+
+        viewModel.folder.observe(this, Observer {
+            if (it == null) {
+                val folder = Folder()
+                folder.name = "TESTE"
+                folder.createdDate = Calendar.getInstance().time
+                viewModel.insertFolder(folder)
+            }
         })
     }
 

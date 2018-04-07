@@ -2,6 +2,7 @@ package com.mcustodio.tasklog.repository.task
 
 import android.arch.lifecycle.LiveData
 import android.content.Context
+import com.mcustodio.tasklog.model.folder.FolderWithTasks
 import com.mcustodio.tasklog.model.task.Task
 import com.mcustodio.tasklog.repository.BaseRepository
 import io.reactivex.Observable
