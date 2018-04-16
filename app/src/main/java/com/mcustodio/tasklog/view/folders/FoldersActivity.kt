@@ -5,7 +5,9 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.mcustodio.tasklog.R
+import com.mcustodio.tasklog.model.folder.Folder
 import com.mcustodio.tasklog.utils.Preferences
 import com.mcustodio.tasklog.view.main.MainActivity
 import kotlinx.android.synthetic.main.activity_folders.*
@@ -46,9 +48,7 @@ class FoldersActivity : AppCompatActivity() {
             folder.id?.let { MainActivity.launch(this, it) }
         }
 
-        adapter.onItemLongClick = { folder ->
-            viewModel.delete(folder)
-        }
+        adapter.onItemLongClick = { folder -> askToDelete(folder) }
     }
 
 
@@ -64,6 +64,18 @@ class FoldersActivity : AppCompatActivity() {
         if (lastFolderId >= 0) {
             MainActivity.launch(this, lastFolderId)
         }
+    }
+
+
+    private fun askToDelete(folder: Folder) {
+        MaterialDialog.Builder(this)
+                .title("Excluir?")
+                .positiveText("Sim")
+                .negativeText("Não")
+                .onPositive { _, _ ->
+                    viewModel.delete(folder)
+                }
+                .show()
     }
 
 
