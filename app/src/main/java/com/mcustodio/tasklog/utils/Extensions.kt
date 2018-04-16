@@ -223,6 +223,14 @@ fun Date.ignoreSeconds() : Date {
 }
 
 
+fun Date.roundToNearestFiveMinutes() : Date {
+    val precision = (60000 * 5)
+    val notRounded = this.time.toDouble() / precision
+    this.time = Math.round(notRounded) * precision
+    return this
+}
+
+
 
 // View extensions
 

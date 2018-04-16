@@ -20,6 +20,7 @@ import android.text.InputType
 import com.mcustodio.tasklog.utils.Preferences
 import com.mcustodio.tasklog.utils.TimeDiff
 import com.mcustodio.tasklog.utils.ignoreSeconds
+import com.mcustodio.tasklog.utils.roundToNearestFiveMinutes
 
 
 class MainActivity : AppCompatActivity() {
@@ -176,7 +177,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.update(task)
         } else {
             val newTask = Task()
-            newTask.startDate = Calendar.getInstance().time.ignoreSeconds()
+            newTask.startDate = Calendar.getInstance().time.ignoreSeconds().roundToNearestFiveMinutes()
             newTask.description = description?.trim()
             viewModel.insert(newTask)
         }
