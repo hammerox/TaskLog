@@ -22,4 +22,8 @@ interface FolderDao : BaseDao<Folder> {
     @Query("SELECT * FROM Folder")
     fun getAllWithTasks() : LiveData<List<FolderWithTasks>>
 
+    @Transaction
+    @Query("SELECT * FROM Folder WHERE id =:folderId")
+    fun getWithTasks(folderId : String) : LiveData<FolderWithTasks>
+
 }

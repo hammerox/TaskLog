@@ -14,8 +14,8 @@ import io.reactivex.schedulers.Schedulers
 class FolderRepository(context: Context) : BaseRepository(context) {
 
 
-    fun getDatabaseWithTasks() : LiveData<List<FolderWithTasks>> {
-        return database.folderDao().getAllWithTasks()
+    fun getFolderWithTasks(folderId: Long) : LiveData<FolderWithTasks> {
+        return database.folderDao().getWithTasks(folderId.toString())
     }
 
 

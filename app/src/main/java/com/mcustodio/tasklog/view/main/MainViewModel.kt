@@ -11,28 +11,26 @@ import com.mcustodio.tasklog.repository.task.TaskRepository
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
 
-    var counter : LiveData<Int>
-    var tasks: LiveData<List<Task>>
-    var descriptionList: LiveData<List<String>>
-    var folders : LiveData<List<FolderWithTasks>>
-    var folder : LiveData<FolderWithTasks?>
+    lateinit var folder : LiveData<Folder>
+    lateinit var tasks: LiveData<List<Task>>
+    lateinit var descriptionList: LiveData<List<String>>
 
     private val repository by lazy { TaskRepository(app) }
     private val folderRepo by lazy { FolderRepository(app) }
 
 
 
-    init {
-        tasks = repository.getDatabase()
-        counter = Transformations.map(tasks) { it.size }
+    fun loadData(folderId: Long) {
+        val folderWithTasks = folderRepo.getFolderWithTasks(folderId)
+        folder = Transformations.map(folderWithTasks) { it.folder }
+        tasks = Transformations.map(folderWithTasks) { it.tasks }
         descriptionList = Transformations.map(tasks) { it.mapToDescriptionList() }
-        folders = folderRepo.getDatabaseWithTasks()
-        folder = Transformations.map(folders) { it?.get(0) }
     }
 
 
+
     fun insert(task: Task) {
-        task.folderId = folder.value?.folder?.id
+        task.folderId = folder.value?.id
         repository.insert(task)
     }
 

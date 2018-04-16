@@ -1,8 +1,8 @@
 package com.mcustodio.tasklog.view.main
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -17,7 +17,6 @@ import java.util.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import android.text.InputType
-import com.mcustodio.tasklog.model.folder.Folder
 import com.mcustodio.tasklog.utils.TimeDiff
 import com.mcustodio.tasklog.utils.ignoreSeconds
 
@@ -35,8 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setButtonClickListener()
         setRecyclerView()
-        observeTaskList()
-        observeDescriptionList()
+        observeVariables()
     }
 
 
@@ -72,6 +70,21 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun observeVariables() {
+        viewModel.loadData(folderId)
+        observeFolder()
+        observeTaskList()
+        observeDescriptionList()
+    }
+
+
+    private fun observeFolder() {
+        viewModel.folder.observe(this, Observer {
+            supportActionBar?.title = it?.name
+        })
+    }
+
+
     private fun observeTaskList() {
         viewModel.tasks.observe(this, Observer {
             it?.let { taskAdapter.data = it }
@@ -82,15 +95,6 @@ class MainActivity : AppCompatActivity() {
     private fun observeDescriptionList() {
         viewModel.descriptionList.observe(this, Observer {
             // Apenas observar para popular o LiveData
-        })
-
-        viewModel.folder.observe(this, Observer {
-            if (it == null) {
-                val folder = Folder()
-                folder.name = "TESTE"
-                folder.createdDate = Calendar.getInstance().time
-                viewModel.insertFolder(folder)
-            }
         })
     }
 
@@ -181,10 +185,10 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val KEY_FOLDERID = "folder_id"
 
-        fun launch(activity: Activity, folderId: Long) {
-            val intent = Intent(activity, MainActivity::class.java)
+        fun launch(from: Context, folderId: Long) {
+            val intent = Intent(from, MainActivity::class.java)
             intent.putExtra(KEY_FOLDERID, folderId)
-            activity.startActivity(intent)
+            from.startActivity(intent)
         }
     }
 
