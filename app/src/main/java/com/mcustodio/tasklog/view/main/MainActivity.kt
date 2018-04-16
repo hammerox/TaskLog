@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.update(task)
         } else {
             val newTask = Task()
-            newTask.startDate = Calendar.getInstance().time.ignoreSeconds().roundToNearestFiveMinutes()
+            newTask.startDate = Calendar.getInstance().time.roundToNearestFiveMinutes()
             newTask.description = description?.trim()
             viewModel.insert(newTask)
         }
