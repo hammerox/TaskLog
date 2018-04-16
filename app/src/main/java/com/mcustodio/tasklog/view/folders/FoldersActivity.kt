@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.mcustodio.tasklog.R
+import com.mcustodio.tasklog.utils.Preferences
 import com.mcustodio.tasklog.view.main.MainActivity
 import kotlinx.android.synthetic.main.activity_folders.*
 
@@ -21,6 +22,12 @@ class FoldersActivity : AppCompatActivity() {
         setContentView(R.layout.activity_folders)
         setView()
         observeFolders()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        launchLastFolderIfPossible()
     }
 
 
@@ -49,6 +56,14 @@ class FoldersActivity : AppCompatActivity() {
         viewModel.folders.observe(this, Observer { folders ->
             folders?.let { adapter.data = it }
         })
+    }
+
+
+    private fun launchLastFolderIfPossible() {
+        val lastFolderId = Preferences(this).lastSelectedFolder
+        if (lastFolderId >= 0) {
+            MainActivity.launch(this, lastFolderId)
+        }
     }
 
 

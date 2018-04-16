@@ -17,6 +17,7 @@ import java.util.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import android.text.InputType
+import com.mcustodio.tasklog.utils.Preferences
 import com.mcustodio.tasklog.utils.TimeDiff
 import com.mcustodio.tasklog.utils.ignoreSeconds
 
@@ -46,12 +47,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> finish()
+            android.R.id.home -> exitActivity()
             R.id.menuitem_counter_delete -> viewModel.clearAll()
         }
         return true
     }
 
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        exitActivity()
+    }
 
     private fun setButtonClickListener() {
         fab_counter_add.setOnClickListener {
@@ -81,6 +87,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeFolder() {
         viewModel.folder.observe(this, Observer {
+            Preferences(this).lastSelectedFolder = it?.id ?: -1
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.title = it?.name
         })
@@ -98,6 +105,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.descriptionList.observe(this, Observer {
             // Apenas observar para popular o LiveData
         })
+    }
+
+
+    private fun exitActivity() {
+        Preferences(this).lastSelectedFolder = -1   // Clearing variable
+        finish()
     }
 
 
