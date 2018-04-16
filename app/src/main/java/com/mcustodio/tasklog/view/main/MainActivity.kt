@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            android.R.id.home -> finish()
             R.id.menuitem_counter_delete -> viewModel.clearAll()
         }
         return true
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeFolder() {
         viewModel.folder.observe(this, Observer {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.title = it?.name
         })
     }
