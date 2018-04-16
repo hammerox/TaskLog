@@ -1,7 +1,9 @@
 package com.mcustodio.tasklog.view.main
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
@@ -24,7 +26,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
-    private val counterAdapter = TaskAdapter()
+    private val taskAdapter = TaskAdapter()
+    private val folderId by lazy { intent.getLongExtra(KEY_FOLDERID, -1) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,18 +63,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun setRecyclerView() {
         list_counter.layoutManager = LinearLayoutManager(this)
-        list_counter.adapter = counterAdapter
+        list_counter.adapter = taskAdapter
         ViewCompat.setNestedScrollingEnabled(list_counter, false)
-        counterAdapter.onItemClick = onCardItemClick
-        counterAdapter.onItemLongClick = onCardItemLongClick
-        counterAdapter.onTimeClick = onTimeItemClick
-        counterAdapter.onDiffTimeClick = onDiffTimeItemClick
+        taskAdapter.onItemClick = onCardItemClick
+        taskAdapter.onItemLongClick = onCardItemLongClick
+        taskAdapter.onTimeClick = onTimeItemClick
+        taskAdapter.onDiffTimeClick = onDiffTimeItemClick
     }
 
 
     private fun observeTaskList() {
         viewModel.tasks.observe(this, Observer {
-            it?.let { counterAdapter.data = it }
+            it?.let { taskAdapter.data = it }
         })
     }
 
@@ -170,6 +173,18 @@ class MainActivity : AppCompatActivity() {
             now.set(Calendar.SECOND, second)
             task.startDate = now.time
             viewModel.update(task)
+        }
+    }
+
+
+
+    companion object {
+        const val KEY_FOLDERID = "folder_id"
+
+        fun launch(activity: Activity, folderId: Long) {
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.putExtra(KEY_FOLDERID, folderId)
+            activity.startActivity(intent)
         }
     }
 

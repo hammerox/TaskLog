@@ -37,9 +37,7 @@ class FoldersActivity : AppCompatActivity() {
 
     private fun setAdapterClickListeners() {
         adapter.onItemClick = { folder ->
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("folder_id", folder.id)
-            startActivity(intent)
+            folder.id?.let { MainActivity.launch(this, it) }
         }
 
         adapter.onItemLongClick = { folder ->
