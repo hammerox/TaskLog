@@ -26,7 +26,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         tasks = repository.getDatabase()
         counter = Transformations.map(tasks) { it.size }
         descriptionList = Transformations.map(tasks) { it.mapToDescriptionList() }
-        folders = folderRepo.getDatabase()
+        folders = folderRepo.getDatabaseWithTasks()
         folder = Transformations.map(folders) { it?.get(0) }
     }
 

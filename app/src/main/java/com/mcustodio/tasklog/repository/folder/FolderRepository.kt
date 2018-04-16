@@ -14,14 +14,27 @@ import io.reactivex.schedulers.Schedulers
 class FolderRepository(context: Context) : BaseRepository(context) {
 
 
-    fun getDatabase() : LiveData<List<FolderWithTasks>> {
+    fun getDatabaseWithTasks() : LiveData<List<FolderWithTasks>> {
         return database.folderDao().getAllWithTasks()
+    }
+
+
+    fun getDatabase() : LiveData<List<Folder>> {
+        return database.folderDao().getAll()
     }
 
 
     fun insert(folder: Folder) {
         Observable.just(database.folderDao())
                 .doOnNext { it.insert(folder) }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+    }
+
+
+    fun delete(folder: Folder) {
+        Observable.just(database.folderDao())
+                .doOnNext { it.delete(folder) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
     }
