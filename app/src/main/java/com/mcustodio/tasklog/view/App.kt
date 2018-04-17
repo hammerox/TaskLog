@@ -2,7 +2,7 @@ package com.mcustodio.tasklog.view
 
 import android.app.Application
 import com.facebook.stetho.Stetho
-import com.mcustodio.tasklog.repository.AppDatabase
+import com.mcustodio.tasklog.model.AppDatabase
 
 /**
  * Created by logonrm on 17/02/2018.

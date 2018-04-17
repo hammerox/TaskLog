@@ -1,6 +1,7 @@
 package com.mcustodio.tasklog.repository
 
 import android.content.Context
+import com.mcustodio.tasklog.model.AppDatabase
 
 /**
  * Created by logonrm on 17/02/2018.

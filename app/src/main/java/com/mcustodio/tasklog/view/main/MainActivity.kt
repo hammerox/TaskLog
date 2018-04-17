@@ -19,7 +19,6 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import android.text.InputType
 import com.mcustodio.tasklog.utils.Preferences
 import com.mcustodio.tasklog.utils.TimeDiff
-import com.mcustodio.tasklog.utils.ignoreSeconds
 import com.mcustodio.tasklog.utils.roundToNearestFiveMinutes
 
 
@@ -61,16 +60,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setButtonClickListener() {
-        fab_counter_add.setOnClickListener {
+        fab_task_add.setOnClickListener {
             askForDescription()
+        }
+        fab_task_stop.setOnClickListener {
+            createTimeBreakTask()
         }
     }
 
 
     private fun setRecyclerView() {
-        list_counter.layoutManager = LinearLayoutManager(this)
-        list_counter.adapter = taskAdapter
-        ViewCompat.setNestedScrollingEnabled(list_counter, false)
+        list_task.layoutManager = LinearLayoutManager(this)
+        list_task.adapter = taskAdapter
+        ViewCompat.setNestedScrollingEnabled(list_task, false)
         taskAdapter.onItemClick = onCardItemClick
         taskAdapter.onItemLongClick = onCardItemLongClick
         taskAdapter.onTimeClick = onTimeItemClick
@@ -97,7 +99,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeTaskList() {
         viewModel.tasks.observe(this, Observer {
-            it?.let { taskAdapter.data = it }
+            it?.let { tasks ->
+                taskAdapter.data = tasks
+                val showTimeBreakFab = tasks.sortedBy { it.startDate }.lastOrNull()?.isActive() ?: false
+                if (showTimeBreakFab) fab_task_stop.show() else fab_task_stop.hide()
+            }
         })
     }
 
@@ -116,7 +122,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val onCardItemClick : ((Task) -> Unit) = { task ->
-        askForDescription(task)
+        if (task.isActive()) askForDescription(task)
     }
 
 
@@ -179,8 +185,17 @@ class MainActivity : AppCompatActivity() {
             val newTask = Task()
             newTask.startDate = Calendar.getInstance().time.roundToNearestFiveMinutes()
             newTask.description = description?.trim()
+            newTask.isRunningTime = true
             viewModel.insert(newTask)
         }
+    }
+
+
+    private fun createTimeBreakTask() {
+        val newTask = Task()
+        newTask.isRunningTime = false
+        newTask.startDate = Calendar.getInstance().time.roundToNearestFiveMinutes()
+        viewModel.insert(newTask)
     }
 
 

@@ -14,6 +14,10 @@ class Task(@PrimaryKey(autoGenerate = true) var id : Long? = null,
            var startDate: Date? = null,
            var endDate: Date? = null,
            var description: String? = null,
-           var folderId: Long? = null) {
+           var folderId: Long? = null,
+           var isRunningTime: Boolean? = true) {
+
+
+    fun isActive() : Boolean = isRunningTime ?: true
 
 }

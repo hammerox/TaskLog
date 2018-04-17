@@ -1,7 +1,9 @@
 package com.mcustodio.tasklog.view.main
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.mcustodio.tasklog.R
 import com.mcustodio.tasklog.model.task.Task
 import com.mcustodio.tasklog.utils.TimeDiff
 import com.mcustodio.tasklog.utils.switchVisibility
@@ -18,13 +20,20 @@ class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val description = view.text_counteritem_description
     private val diff = view.text_counteritem_diff
 
+    private val defaultColor = ContextCompat.getColor(view.context, android.R.color.primary_text_dark)
+    private val darkColor = ContextCompat.getColor(view.context, R.color.darkBackground)
+
 
     fun setView(task: Task, nextTask: Task?) {
+        val cardColor = if (task.isActive()) defaultColor else darkColor
+        card.setCardBackgroundColor(cardColor)
+
         date.text = task.startDate?.toString("HH'h'mm") ?: ""
+
         description.text = task.description
         description.switchVisibility(!task.description.isNullOrBlank())
 
-        diff.switchVisibility(nextTask != null)
+        diff.switchVisibility(nextTask != null && task.isActive())
         diff.text = timeDifference(task, nextTask)
     }
 
