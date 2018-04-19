@@ -17,6 +17,6 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_folders_add"
         style="@style/BaseFab"
-        android:src="@drawable/ic_add"/>
+        android:src="@drawable/ic_folder_add"/>
 
 </FrameLayout>
