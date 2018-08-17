@@ -18,6 +18,7 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -35,6 +36,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:multidex:1.0.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
@@ -52,6 +54,7 @@ dependencies {
     implementation('com.wdullaer:materialdatetimepicker:3.4.0') {
         exclude group: "com.android.support"
     }
+    implementation 'com.opencsv:opencsv:4.0'
     kapt "android.arch.lifecycle:compiler:$livedata"
     kapt "android.arch.persistence.room:compiler:1.0.0"
     testImplementation 'junit:junit:4.12'
