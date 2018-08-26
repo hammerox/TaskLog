@@ -3,6 +3,8 @@ package com.mcustodio.tasklog.view.folders
 import android.Manifest
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -119,21 +121,18 @@ class FoldersActivity : AppCompatActivity() {
 
 
     // todo - Refatorar código para Repository
-    // todo - Enviar para email
     private fun export() {
-
         val exportDir = File(Environment.getExternalStorageDirectory(), "")
         if (!exportDir.exists()) exportDir.mkdirs()
 
-        val file = File(exportDir, "csvname.csv")
+        val file = File(exportDir, "TaskLog - Report.csv")
         try {
             file.createNewFile()
             val csvWrite = CSVWriter(FileWriter(file))
             val db = AppDatabase.getFrom(this).openHelper.readableDatabase
             val cursor = db.query("SELECT * FROM Task",null)
             csvWrite.writeNext(cursor.columnNames)
-            while(cursor.moveToNext())
-            {
+            while(cursor.moveToNext()) {
                 //Which column you want to exprort
                 val list = arrayListOf<String>()
                 for (i in 0..(cursor.columnCount - 1)) {
@@ -145,10 +144,16 @@ class FoldersActivity : AppCompatActivity() {
             csvWrite.close()
             cursor.close()
 
-            Toast.makeText(this, "SUCESSO", Toast.LENGTH_LONG).show()
-        }
-        catch(sqlEx: Exception)
-        {
+            val path = Uri.fromFile(file)
+            val emailIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "vnd.android.cursor.dir/email"
+                putExtra(Intent.EXTRA_STREAM, path)
+                putExtra(Intent.EXTRA_SUBJECT, "TaskLog - Report")
+            }
+            startActivity(Intent.createChooser(emailIntent , "Exportar para..."))
+
+//            Toast.makeText(this, "SUCESSO", Toast.LENGTH_LONG).show()
+        } catch(sqlEx: Exception) {
             requestWritePermission()
             Toast.makeText(this, sqlEx.message, Toast.LENGTH_LONG).show()
         }
