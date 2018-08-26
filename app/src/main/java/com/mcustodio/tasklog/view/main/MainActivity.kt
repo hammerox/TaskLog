@@ -175,21 +175,22 @@ class MainActivity : AppCompatActivity() {
     // If example != null -> update
     private fun askForDescription(task: Task? = null) {
         val list = viewModel.descriptionList.value ?: listOf()
-        val onSelect: ((String) -> Unit) = { description ->
-            createOrUpdateTask(task, description)
+        val onSelect: ((String, Date) -> Unit) = { description, time ->
+            createOrUpdateTask(task, description, time)
         }
         DescriptionDialog(this, list, onSelect).show(task)
     }
 
 
-    private fun createOrUpdateTask(task: Task?, description: String?) {
+    private fun createOrUpdateTask(task: Task?, description: String?, time: Date) {
         if (task != null) {
             task.description = description
+            task.startDate = time
             viewModel.update(task)
         } else {
             val newTask = Task()
-            newTask.startDate = Calendar.getInstance().time.roundToNearestFiveMinutes()
             newTask.description = description?.trim()
+            newTask.startDate = time
             newTask.isRunningTime = true
             viewModel.insert(newTask)
         }
