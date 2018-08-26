@@ -21,12 +21,15 @@ class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val diff = view.text_counteritem_diff
     private val ellipsisAnim = view.anim_counteritem_ellipsis
 
-    private val defaultColor = ContextCompat.getColor(view.context, android.R.color.primary_text_dark)
-    private val darkColor = ContextCompat.getColor(view.context, R.color.darkBackground)
+    private val defaultCardColor = ContextCompat.getColor(view.context, android.R.color.primary_text_dark)
+    private val inactiveCardColor = ContextCompat.getColor(view.context, R.color.darkBackground)
+    private val defaultDiffTextColor = ContextCompat.getColor(view.context, R.color.colorAccent)
+    private val inactiveDiffTextColor = ContextCompat.getColor(view.context, R.color.textColor)
 
 
     fun setView(task: Task, nextTask: Task?) {
-        val cardColor = if (task.isActive()) defaultColor else darkColor
+        val cardColor = if (task.isActive()) defaultCardColor else inactiveCardColor
+        val diffTextColor = if (task.isActive()) defaultDiffTextColor else inactiveDiffTextColor
         val showAnimation = nextTask == null && task.isActive()
         card.setCardBackgroundColor(cardColor)
 
@@ -35,6 +38,7 @@ class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         description.text = task.description
 
         diff.text = timeDifference(task, nextTask)
+        diff.setTextColor(diffTextColor)
         diff.switchVisibility(!showAnimation)
 
         ellipsisAnim.switchVisibility(showAnimation)

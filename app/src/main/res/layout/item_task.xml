@@ -30,6 +30,16 @@
                 tools:text="16h20"/>
 
             <TextView
+                android:id="@+id/text_counteritem_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="16dp"
+                android:textColor="@color/colorPrimaryDark"
+                tools:text="Aqui pode ter um texto bem grande. Podem ter muitas palavras\n\nOu até mesmo muitas linhas!"
+                />
+
+            <TextView
                 android:id="@+id/text_counteritem_diff"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
@@ -42,19 +52,10 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:padding="15dp"
+                tools:visibility="gone"
                 app:lottie_rawRes="@raw/anim_ellipsis"
                 app:lottie_loop="true"
                 app:lottie_autoPlay="true"/>
-
-            <TextView
-                android:id="@+id/text_counteritem_description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="16dp"
-                android:textColor="@color/colorPrimaryDark"
-                tools:text="Aqui pode ter um texto bem grande. Podem ter muitas palavras\n\nOu até mesmo muitas linhas!"
-                />
 
 
         </LinearLayout>
