@@ -30,6 +30,7 @@ class FoldersActivity : AppCompatActivity() {
 
     private val viewModel by lazy { ViewModelProviders.of(this).get(FoldersViewModel::class.java) }
     private val adapter = FolderAdapter()
+    private var scrollToBottom = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,7 +91,13 @@ class FoldersActivity : AppCompatActivity() {
 
     private fun observeFolders() {
         viewModel.folders.observe(this, Observer { folders ->
-            folders?.let { adapter.data = it }
+            folders?.let {
+                adapter.data = it
+                if (scrollToBottom) {
+                    recycler_folders.scrollToPosition(folders.size - 1)
+                    scrollToBottom = false
+                }
+            }
         })
     }
 

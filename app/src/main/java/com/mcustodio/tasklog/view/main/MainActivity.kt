@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
     private val taskAdapter = TaskAdapter()
     private val folderId by lazy { intent.getLongExtra(KEY_FOLDERID, -1) }
+    private var scrollToBottom = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,6 +104,10 @@ class MainActivity : AppCompatActivity() {
                 taskAdapter.data = tasks
                 val showTimeBreakFab = tasks.sortedBy { it.startDate }.lastOrNull()?.isActive() ?: false
                 if (showTimeBreakFab) fab_task_stop.show() else fab_task_stop.hide()
+                if (scrollToBottom) {
+                    list_task.scrollToPosition(tasks.size - 1)
+                    scrollToBottom = false
+                }
             }
         })
     }
