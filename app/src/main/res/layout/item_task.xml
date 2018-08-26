@@ -23,12 +23,19 @@
 
             <TextView
                 android:id="@+id/text_counteritem_date"
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textSize="22dp"
-                tools:text="(date)"/>
+                tools:text="16h20"/>
 
+            <TextView
+                android:id="@+id/text_counteritem_diff"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
+                tools:text="30m"/>
 
             <TextView
                 android:id="@+id/text_counteritem_description"
@@ -37,17 +44,8 @@
                 android:layout_weight="1"
                 android:layout_margin="16dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:visibility="gone"
-                tools:visibility="visible"
                 tools:text="Aqui pode ter um texto bem grande. Podem ter muitas palavras\n\nOu até mesmo muitas linhas!"
                 />
-
-            <TextView
-                android:id="@+id/text_counteritem_diff"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                tools:text="30m"/>
 
 
         </LinearLayout>

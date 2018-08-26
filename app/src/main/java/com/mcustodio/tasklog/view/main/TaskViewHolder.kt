@@ -31,9 +31,7 @@ class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         date.text = task.startDate?.toString("HH'h'mm") ?: ""
 
         description.text = task.description
-        description.switchVisibility(!task.description.isNullOrBlank())
 
-        diff.switchVisibility(nextTask != null && task.isActive())
         diff.text = timeDifference(task, nextTask)
     }
 

@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+//    implementation 'com.airbnb.android:lottie:2.6.0-beta19'
     implementation('com.wdullaer:materialdatetimepicker:3.4.0') {
         exclude group: "com.android.support"
     }
